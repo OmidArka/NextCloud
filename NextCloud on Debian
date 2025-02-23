@@ -79,11 +79,37 @@ systemctl reload apache2
 NextCloud : 
 
 wget https://download.nextcloud.com/server/releases/nextcloud-30.0.6.zip
-unzip nextcloud-27.1.2.zip 
+unzip nextcloud-30.0.6.zip
+cp -r nextcloud /var/www/html/
+chown -R www-data:www-data /var/www/html/nextcloud
+vim.tiny /etc/apache2/sites-available/nextcloud.conf
 
+DocumentRoot “/var/www/html/nextcloud”
+
+ServerName example.com
+
+<Directory “/var/www/html/nextcloud/”>
+
+Options MultiViews FollowSymlinks
+
+AllowOverride All
+
+Order allow,deny
+
+Allow from all
+
+</Directory>
+
+TransferLog /var/log/apache2/nextcloud_access.log
+
+ErrorLog /var/log/apache2/nextcloud_error.log
+
+</VirtualHost>
+
+vim.tiny /etc/php/8.1/apache2/php.ininano /etc/php/8.2/apache2/php.ini
 
 
 https://download.nextcloud.com/server/releases/
 
-
+https://asamserver.com/blog/install-nextcloud-in-ubuntu/
 
