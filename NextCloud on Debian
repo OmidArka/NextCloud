@@ -1,0 +1,89 @@
+پیش نیاز ها : 
+
+PostgreSQL
+Apache 
+PHP Runtime	
+
+
+vim.tiny /etc/apt/sources.list
+
+deb https://ftp.debian.org/debian/ bookworm contrib main non-free non-free-firmware
+# deb-src https://ftp.debian.org/debian/ bookworm contrib main non-free non-free-firmware
+
+deb https://ftp.debian.org/debian/ bookworm-updates contrib main non-free non-free-firmware
+# deb-src https://ftp.debian.org/debian/ bookworm-updates contrib main non-free non-free-firmware
+
+deb https://ftp.debian.org/debian/ bookworm-proposed-updates contrib main non-free non-free-firmware
+# deb-src https://ftp.debian.org/debian/ bookworm-proposed-updates contrib main non-free non-free-firmware
+
+deb https://ftp.debian.org/debian/ bookworm-backports contrib main non-free non-free-firmware
+# deb-src https://ftp.debian.org/debian/ bookworm-backports contrib main non-free non-free-firmware
+
+deb https://security.debian.org/debian-security/ bookworm-security contrib main non-free non-free-firmware
+# deb-src https://security.debian.org/debian-security/ bookworm-security contrib main non-free non-free-firmware
+
+
+exit
+
+apt update
+apt upgrade
+apt install nano vim wget curl net-tools bash-completion network-manager resolvconf memtester stress
+apt update && upgrade 
+
+vim.tiny /etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 4.2.2.4
+apt update && upgrade 
+
+POSTGRESQL :
+
+
+apt install -y postgresql-common
+/usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+apt update && upgrade 
+apt install postgresql postgresql-contrib
+su - postgres
+createuser --pwprompt cloud
+createdb -O cloud cloud
+psql
+CREATE USER nextcloud WITH PASSWORD '<PASSWORD>' INHERIT;
+GRANT cloud TO nextcloud;
+Confirm user exists
+\q
+systemctl restart postgresql
+zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | psql -U nextcloud -d cloud -W
+systemctl enable postgresql
+
+https://www.postgresql.org/download/linux/debian/
+https://wiki.crowncloud.net/?How_To_Install_PostgreSQL_on_Debian_12
+https://reintech.io/blog/installing-postgresql-on-debian-12-for-beginners
+
+APACHE2 :
+
+apt install apache2
+apt update && upgrade 
+systemctl status apache2
+
+apt install ufw -y
+systemctl enable ufw
+
+
+PHP :
+
+apt install php libapache2-mod-php php-imagick php-common php-mysql php-gd php-json php-curl php-zip php-xml php-mbstring php-bz2 php-intl php-bcmath php-gmp php-dom unzip -y
+
+php -v
+systemctl reload apache2
+
+
+NextCloud : 
+
+wget https://download.nextcloud.com/server/releases/nextcloud-30.0.6.zip
+unzip nextcloud-27.1.2.zip 
+
+
+
+https://download.nextcloud.com/server/releases/
+
+
+
